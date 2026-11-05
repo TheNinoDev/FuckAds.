@@ -12,13 +12,21 @@ if ($head -ne $remote) { throw 'The local commit must match origin/main. Run pus
 $manifest = Get-Content (Join-Path $root 'manifest.json') -Raw | ConvertFrom-Json
 if ($manifest.version -notmatch '^\d+\.\d+\.\d+(\.\d+)?$') { throw 'Invalid manifest version.' }
 $tag = 'v' + $manifest.version
-& gh release view $tag --repo 'TheNinoDev/FuckAds.' *> $null
-if ($LASTEXITCODE -eq 0) { throw "Release $tag already exists. Increase manifest.json version first." }
+$previousErrorPreference = $ErrorActionPreference
+try {
+ $ErrorActionPreference = 'Continue'
+ $releaseCheck = @(& gh release view $tag --repo 'TheNinoDev/FuckAds.' 2>&1)
+ $releaseCheckExit = $LASTEXITCODE
+} finally { $ErrorActionPreference = $previousErrorPreference }
+if ($releaseCheckExit -eq 0) { throw "Release $tag already exists. Increase manifest.json version first." }
+if (($releaseCheck | Out-String) -notmatch '(?i)release not found') {
+ throw "Could not check whether $tag already exists: $(($releaseCheck | Out-String).Trim())"
+}
 $stage = Join-Path ([IO.Path]::GetTempPath()) ('fuckads-release-' + [guid]::NewGuid().ToString('N'))
 $zip = Join-Path $stage 'FuckAds.zip'
 try {
  New-Item -ItemType Directory -Path (Join-Path $stage 'package') -Force | Out-Null
- $items = @('manifest.json','background.js','city-observer.js','domains.json','popup.css','popup.html','popup.js','progress.html','progress.js','work-bridge.js','workink.js','youtube-ads.js','adblock-cosmetic.js','adblock-frames.js','adblock-generic.js','adblock-rules.json','spoof','licenses','LICENSE','THIRD_PARTY_NOTICES.md','README.md')
+ $items = @('manifest.json','background.js','dynamic-filters.js','city-observer.js','offscreen.html','offscreen.js','domains.json','popup.css','popup.html','popup.js','progress.html','progress.js','work-bridge.js','workink.js','youtube-ads.js','adblock-cosmetic.js','adblock-frames.js','adblock-generic.js','adblock-rules.json','spoof','icons','licenses','LICENSE','THIRD_PARTY_NOTICES.md','README.md')
  foreach ($item in $items) { $source=Join-Path $root $item; if (!(Test-Path -LiteralPath $source)) { throw "Missing package item: $item" }; Copy-Item -LiteralPath $source -Destination (Join-Path $stage 'package') -Recurse -Force }
  Compress-Archive -Path (Join-Path $stage 'package\*') -DestinationPath $zip -CompressionLevel Optimal
  & gh release create $tag $zip --repo 'TheNinoDev/FuckAds.' --target $head --title "FuckAds $($manifest.version)" --generate-notes

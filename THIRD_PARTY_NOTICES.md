@@ -26,6 +26,8 @@ SOFTWARE.
 
 ## Ad blocking domains
 
+The extension can download current domain data from [HaGeZi Multi LIGHT](https://github.com/hagezi/dns-blocklists), licensed under its [project license](https://github.com/hagezi/dns-blocklists/blob/main/LICENSE). Domain names are validated and converted to third-party browser blocking rules.
+
 The bundled adblock-rules.json converts and combines domain entries from [Steven Black’s hosts list](https://github.com/StevenBlack/hosts) and the [AdAway default blocklist](https://github.com/AdAway/adaway.github.io/blob/master/hosts.txt), retrieved 2026-11-04. Entries were deduplicated and converted to browser network rules; Work.ink and bypass.city were excluded.
 
 AdAway default blocklist: Kicelo, Dominik Schuermann and the contributors in its [commit history](https://github.com/AdAway/adaway.github.io/commits/master/hosts.txt), licensed under [Creative Commons Attribution 3.0](https://creativecommons.org/licenses/by/3.0/). Changes: conversion, filtering and combination with the Steven Black list.
@@ -55,7 +57,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## EasyList filters
 
-The [EasyList authors](https://easylist.to/) provide [EasyList](https://easylist.to/easylist/easylist.txt) and the [Adblock Warning Removal List](https://github.com/easylist/antiadblockfilters), downloaded 2026-11-04. Selected domain, script and site-specific cosmetic filters were translated to browser rules, with unsupported forms omitted. These adapted filters are shared under [Creative Commons Attribution-ShareAlike 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/); see the [EasyList license](https://easylist.to/pages/licence.html).
+The [EasyList authors](https://easylist.to/) provide [EasyList](https://easylist.to/easylist/easylist.txt) and the [Adblock Warning Removal List](https://github.com/easylist/antiadblockfilters), downloaded 2026-11-04. Selected domain, script and site-specific cosmetic filters were translated to browser rules, with unsupported forms omitted. Current supported YouTube CSS selectors are also fetched from EasyList, validated and converted into cosmetic hiding rules. These adapted filters are shared under [Creative Commons Attribution-ShareAlike 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/); see the [EasyList license](https://easylist.to/pages/licence.html).
 
 ## Compiled network filters
 
