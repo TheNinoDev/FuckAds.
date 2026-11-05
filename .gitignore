@@ -1,0 +1,11 @@
+.firecrawl/
+.research/
+_metadata/
+BypassTools_Extension.chromium-full/
+dist/
+*.zip
+*.crx
+*.pem
+.env
+.env.*
+node_modules/

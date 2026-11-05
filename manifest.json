@@ -1,0 +1,103 @@
+{
+  "manifest_version": 3,
+  "name": "FuckAds",
+  "version": "0.25.0",
+  "description": "Open supported link destinations in one click.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "alarms",
+    "declarativeNetRequest",
+    "webNavigation",
+    "downloads"
+  ],
+  "host_permissions": [
+    "https://work.ink/*",
+    "https://*.work.ink/*",
+    "https://bypass.city/*",
+    "*://*/*"
+  ],
+  "web_accessible_resources": [],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://bypass.city/bypass*"
+      ],
+      "js": [
+        "city-observer.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "js": [
+        "work-bridge.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://work.ink/*",
+        "https://*.work.ink/*"
+      ],
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "exclude_matches": [
+        "*://work.ink/*",
+        "*://*.work.ink/*",
+        "*://bypass.city/*"
+      ],
+      "js": [
+        "adblock-generic.js",
+        "adblock-cosmetic.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "https://*.youtube.com/*",
+        "https://youtube.com/*"
+      ],
+      "js": [
+        "youtube-ads.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "exclude_matches": [
+        "*://bypass.city/*"
+      ],
+      "js": [
+        "adblock-frames.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "FuckAds"
+  },
+  "minimum_chrome_version": "101",
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "adblock",
+        "enabled": false,
+        "path": "adblock-rules.json"
+      }
+    ]
+  },
+  "homepage_url": "https://github.com/TheNinoDev/FuckAds."
+}
